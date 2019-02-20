@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Code\Include\Base\Timer.h" />
+    <ClInclude Include="Code\Include\Base\Window.h" />
+    <ClInclude Include="Code\Include\Base\Input.h" />
+    <ClInclude Include="Code\Include\DirectX\DXCommon.h" />
+    <ClInclude Include="Code\Include\DirectX\DXIntegration.h" />
+    <ClInclude Include="Code\Include\Rendering\Renderer.h" />
+    <ClInclude Include="Code\Include\Rendering\Material.h" />
+    <ClInclude Include="Code\Include\Rendering\Mesh.h" />
+    <ClInclude Include="SHUTDOWN-ERRORCODES.h" />
+    <ClInclude Include="Code\Include\Engine\Engine.h" />
+    <ClInclude Include="Code\Include\Engine\DefaultMaterial.h" />
+    <ClInclude Include="Code\Include\Engine\Textur.h" />
+    <ClInclude Include="Code\Include\Engine\Camera.h" />
+    <ClInclude Include="Code\Include\Engine\Transform.h" />
+    <ClInclude Include="Code\Include\Rendering\Entity.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Code\Source\Base\Timer.cpp" />
+    <ClCompile Include="Code\Source\Base\Window.cpp" />
+    <ClCompile Include="Code\Source\main.cpp" />
+    <ClCompile Include="Code\Source\Base\Input.cpp" />
+    <ClCompile Include="Code\Source\DirectX\DXCommon.cpp" />
+    <ClCompile Include="Code\Source\DirectX\DXIntegration.cpp" />
+    <ClCompile Include="Code\Source\Rendering\Renderer.cpp" />
+    <ClCompile Include="Code\Source\Rendering\Material.cpp" />
+    <ClCompile Include="Code\Source\Rendering\Mesh.cpp" />
+    <ClCompile Include="Code\Source\Engine\Engine.cpp" />
+    <ClCompile Include="Code\Source\Engine\Textur.cpp" />
+    <ClCompile Include="Code\Source\Engine\DefaultMaterial.cpp" />
+    <ClCompile Include="Code\Source\Engine\Camera.cpp" />
+    <ClCompile Include="Code\Source\Engine\Transform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="standard_ps.cso" />
+    <None Include="standard_vs.cso" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Code\shader\standard_ps.hlsl" />
+    <FxCompile Include="Code\shader\standard_vs.hlsl" />
+  </ItemGroup>
+</Project>
