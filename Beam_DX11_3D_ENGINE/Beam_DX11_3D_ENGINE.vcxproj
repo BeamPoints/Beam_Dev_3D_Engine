@@ -158,6 +158,7 @@
     <ClInclude Include="Code\Include\Engine\Engine.h" />
     <ClInclude Include="Code\Include\Engine\DefaultMaterial.h" />
     <ClInclude Include="Code\Include\Rendering\Entity.h" />
+    <ClInclude Include="Code\Include\Rendering\Light.h" />
     <ClInclude Include="SHUTDOWN-ERRORCODES.h" />
     <ClInclude Include="Code\Include\Engine\Textur.h" />
     <ClInclude Include="Code\Include\Engine\Transform.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Code\Source\Engine\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assimp-vc140-mtd.dll" />
     <None Include="standard_ps.cso" />
     <None Include="standard_vs.cso" />
   </ItemGroup>

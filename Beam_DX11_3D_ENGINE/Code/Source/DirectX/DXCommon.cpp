@@ -60,8 +60,14 @@ bool CDXCommon::DetermineHardwareIntegration(std::shared_ptr<CWindow> aWindow, I
 	return false;
 }
 
- STextureState2D CDXCommon::CreateTexture2D(ID3D11Device * aDevice, uint32_t const & aWidth, uint32_t const & aHeight,
-	uint32_t const & aDepth,DXGI_FORMAT const & aFormat, D3D11_BIND_FLAG const & aBindFlag, std::vector<std::vector<uint8_t>> const & aData, bool const &aIsCubeMap)
+ STextureState2D CDXCommon::CreateTexture2D(ID3D11Device *aDevice,
+	 uint32_t const &aWidth,
+	 uint32_t const &aHeight,
+	 uint32_t const &aDepth,
+	 DXGI_FORMAT const &aFormat,
+	 D3D11_BIND_FLAG const &aBindFlag,
+	 std::vector<std::vector<uint8_t>> const &aData,
+	 bool const &aIsCubeMap = false)
 {
 	D3D11_TEXTURE2D_DESC textureDesc{ };
 	textureDesc.Width = aWidth;
@@ -77,10 +83,11 @@ bool CDXCommon::DetermineHardwareIntegration(std::shared_ptr<CWindow> aWindow, I
 	textureDesc.MiscFlags = (aIsCubeMap ? D3D11_RESOURCE_MISC_TEXTURECUBE:0);
 
 	std::vector<D3D11_SUBRESOURCE_DATA> inputData;
-	inputData.resize(aDepth);
+
 	if(not(aData.empty() || aData.size() < aDepth))
 	{
-	
+		inputData.resize(aDepth);
+
 		for (uint32_t k = 0; k < aDepth; k++)
 		{
 			D3D11_SUBRESOURCE_DATA  data{ };

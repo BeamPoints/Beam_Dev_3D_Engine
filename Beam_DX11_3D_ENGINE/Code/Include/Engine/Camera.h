@@ -3,8 +3,9 @@
 #include "../Base/Input.h"
 #include "../Base/Timer.h"
 #include "Transform.h"
+#include "../Rendering/Entity.h"
 
-class CCamera
+class CCamera : public CEntity
 {public:
 
 	enum ECameraProjectionType
@@ -23,7 +24,10 @@ class CCamera
 		ECameraProjectionType projectionType;
 	};
 
-    CCamera(){}
+	using CEntity::CEntity;
+
+	inline CCamera(): CEntity(){}
+
     bool Initialize(CameraParameters const &aParameters);
     bool Update(CTimer::State const &aTimerState, CInput const &aInputState);
     bool Finalize(){return true;}
@@ -37,7 +41,6 @@ private:
     void updateProjectionMatrix();
 
 	CameraParameters mParameters;
-	CTransform        mTransform;
 	XMMATRIX         mViewMatrix;
 	XMMATRIX         mProjectionMatrix;
 };

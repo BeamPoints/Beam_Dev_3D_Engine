@@ -51,8 +51,8 @@ PSOutput main(PSInput input)
     float3 Rnorm = normalize(R);
     
     float3 rv = reflect(V, input.normal);
-    float k_reflect = k_reflect.r
-    float4 i_reflect = reflectionTexture.Sample(reflectionSamplerState, rv);
+    //float k_reflect = k_reflect.r
+    //float4 i_reflect = reflectionTexture.Sample(reflectionSamplerState, rv);
 
     float4 ambient_I = float4(226.0 / 255.0, 0.0 / 255.0, 116.0 / 255.0, 255.0 / 255.0);
     float ambient_k = 0.0;
@@ -84,7 +84,7 @@ PSOutput main(PSInput input)
     // output.color = clamp(output.color, 0.0, 1.0);
     output.color = saturate(output.color);
 
-    output.color = i_reflect;
+    //output.color = i_reflect;
     
     return output;
 }

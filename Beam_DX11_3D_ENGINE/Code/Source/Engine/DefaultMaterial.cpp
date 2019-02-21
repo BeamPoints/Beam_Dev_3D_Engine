@@ -16,6 +16,16 @@ void CDefaultMaterial::setProjectionMatrix(XMMATRIX aMatrix)
 
 }
 
+void CDefaultMaterial::setLights(std::vector<CLight> const & aLights)
+{
+	for (uint32_t k = 0; k < min(4, aLights.size()); ++k)
+	{
+		CLight const &light = aLights[k];
+		memcpy(&(mLightBufferData.lights[k]), &(light.getLightParameters()), sizeof(CLight::SLightParameters));
+	}
+
+}
+
 void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection const & aTextures)
 {
 	mTextures = aTextures;
@@ -24,30 +34,28 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 	{
 		CTextur::Texture2DDescriptor diffuseTextureData{ };
 		CTextur::LoadTextureFromFile(aTextures.diffuse.c_str(), diffuseTextureData);
-		mDiffuseTexture
-			= CDXCommon::CreateTexture2D(
-				aDevice,
-				diffuseTextureData.width,
-				diffuseTextureData.height,
-				diffuseTextureData.depth,
-				DXGI_FORMAT_R8G8B8A8_UNORM,
-				D3D11_BIND_SHADER_RESOURCE,
-				diffuseTextureData.inData);
+		mDiffuseTexture = CDXCommon::CreateTexture2D(
+			aDevice,
+			diffuseTextureData.width,
+			diffuseTextureData.height,
+			diffuseTextureData.depth,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_SHADER_RESOURCE,
+			diffuseTextureData.inData, false);
 	}
 
 	if (not mTextures.specular.empty())
 	{
 		CTextur::Texture2DDescriptor specularTextureData{ };
 		CTextur::LoadTextureFromFile(mTextures.specular.c_str(), specularTextureData);
-		mSpecularTexture
-			= CDXCommon::CreateTexture2D(
+		mSpecularTexture = CDXCommon::CreateTexture2D(
 				aDevice,
 				specularTextureData.width,
 				specularTextureData.height,
 				specularTextureData.depth,
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				D3D11_BIND_SHADER_RESOURCE,
-				specularTextureData.inData);
+				specularTextureData.inData, false);
 	}
 
 	if (not mTextures.normal.empty())
@@ -62,37 +70,53 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 				normalTextureData.depth,
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				D3D11_BIND_SHADER_RESOURCE,
-				normalTextureData.inData);
+				normalTextureData.inData,false );
 	}
-	if (not mTextures.normal.empty())
+	if (not mTextures.reflectivity.empty())
+	{
+		CTextur::Texture2DDescriptor reflectivityTextureData{ };
+		CTextur::LoadTextureFromFile(mTextures.reflectivity.c_str(), reflectivityTextureData);
+		mReflectivityTexture
+			= CDXCommon::CreateTexture2D(
+				aDevice,
+				reflectivityTextureData.width,
+				reflectivityTextureData.height,
+				reflectivityTextureData.depth,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				D3D11_BIND_SHADER_RESOURCE,
+				reflectivityTextureData.inData, false);
+	}
+	if (not mTextures.reflectionMap.empty())
 	{
 		bool valid = true;
-		for (std::string const &Filename : )
+		for (std::string const &filename : mTextures.reflectionMap)
 		{
-			valid = valid && not Filename.empty();
+			valid = valid && not filename.empty();
 		}
+
 		if (valid)
 		{
-			CTextur::Texture2DDescriptor ReflectionMap{ };
-			CTextur::LoadTextureArrayFromFiles(mTextures.reflectionMap, ReflectionMap);
+			CTextur::Texture2DDescriptor reflectionMapData{ };
+			CTextur::LoadTextureArrayFromFiles(mTextures.reflectionMap, reflectionMapData);
 			mReflectionMap
 				= CDXCommon::CreateTexture2D(
 					aDevice,
-					ReflectionMap.width,
-					ReflectionMap.height,
-					ReflectionMap.depth,
+					reflectionMapData.width,
+					reflectionMapData.height,
+					reflectionMapData.depth,
 					DXGI_FORMAT_R8G8B8A8_UNORM,
 					D3D11_BIND_SHADER_RESOURCE,
-					normalTextureData.inData[0]);
-
+					reflectionMapData.inData,
+					/* isCubeMap = */ true);
 		}
 	}
 }
 
  bool CDefaultMaterial::InitializeImpl(std::shared_ptr<CDXIntegration> aDirectX)
 {
-	bool const successful = CreateBuffer<SMatrixBuffer>(aDirectX->myDevice(), &mBuffer);
-	return successful;
+	 bool successful = CreateBuffer<SMatrixBuffer>(aDirectX->myDevice(), &mBuffer);
+	 successful &= CreateBuffer<SLightBuffer>(aDirectX->myDevice(), &mLightBuffer);
+	 return successful;
 }
 
  bool CDefaultMaterial::CreateImpl()
@@ -104,18 +128,29 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 
  bool CDefaultMaterial::CommitImpl(std::shared_ptr<CDXIntegration> aDirectX)
 {
-	auto const &updater = [this](SMatrixBuffer *pData) -> bool
-	{
-		memcpy(pData, &mBufferData, sizeof(SMatrixBuffer));
-		return true;
-	};
+	 auto const &lightUpdater = [this](SLightBuffer *pData) -> bool
+	 {
+		 memcpy(pData, &mLightBufferData, sizeof(SLightBuffer));
+		 return true;
+	 };
 
-	bool const updated = UpdateBuffer<SMatrixBuffer>(
-		aDirectX->myContext(),
-		mBuffer,
-		updater);
+	 bool updated = UpdateBuffer<SLightBuffer>(
+		 aDirectX->myContext(),
+		 mLightBuffer,
+		 lightUpdater);
 
-	return updated;
+	 auto const &updater = [this](SMatrixBuffer *pData) -> bool
+	 {
+		 memcpy(pData, &mBufferData, sizeof(SMatrixBuffer));
+		 return true;
+	 };
+
+	 updated &= UpdateBuffer<SMatrixBuffer>(
+		 aDirectX->myContext(),
+		 mBuffer,
+		 updater);
+
+	 return updated;
 }
 
  bool CDefaultMaterial::FinalizeImpl()
@@ -135,11 +170,26 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 	if (mNormalTexture.srv) { mNormalTexture.srv->Release(); mNormalTexture.srv = nullptr; }
 	if (mNormalTexture.texture) { mNormalTexture.texture->Release(); mNormalTexture.texture = nullptr; }
 
+	if (mReflectivityTexture.sampler) { mReflectivityTexture.sampler->Release(); mReflectivityTexture.sampler = nullptr; }
+	if (mReflectivityTexture.rtv) { mReflectivityTexture.rtv->Release(); mReflectivityTexture.rtv = nullptr; }
+	if (mReflectivityTexture.srv) { mReflectivityTexture.srv->Release(); mReflectivityTexture.srv = nullptr; }
+	if (mReflectivityTexture.texture) { mReflectivityTexture.texture->Release(); mReflectivityTexture.texture = nullptr; }
+
+	if (mReflectionMap.sampler) { mReflectionMap.sampler->Release(); mReflectionMap.sampler = nullptr; }
+	if (mReflectionMap.rtv) { mReflectionMap.rtv->Release(); mReflectionMap.rtv = nullptr; }
+	if (mReflectionMap.srv) { mReflectionMap.srv->Release(); mReflectionMap.srv = nullptr; }
+	if (mReflectionMap.texture) { mReflectionMap.texture->Release(); mReflectionMap.texture = nullptr; }
+
 	if (mBuffer)
 	{
 		mBuffer->Release();
 	}
 
+	if (mLightBuffer)
+	{
+		mLightBuffer->Release();
+	}
+	
 	return true;
 }
 

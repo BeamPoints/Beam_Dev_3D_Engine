@@ -20,6 +20,8 @@ private:
 	std::shared_ptr<CDXIntegration> mDirectX;
 	std::shared_ptr<CRenderer> mRenderer;
 	std::shared_ptr<CEntity> mEntity;
+
+	CLight	mLight;
 	
 	CCamera mCamera;
 

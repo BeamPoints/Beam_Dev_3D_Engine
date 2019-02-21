@@ -1,6 +1,6 @@
 #include "../../Include/Base/Timer.h"
 
-CTimer::State::State(double aElapsed, double aTotal){}
+CTimer::State::State(double aElapsed, double aTotal) : elapesed(aElapsed), totalElapsed(aTotal) {}
 
 CTimer::CTimer() : mFrequency({}), mFirstTimestamp({}), mPreviousTimestamp({}), mCurrentTimestamp({}), mElapsed(0.0), mTotalElapsed(0.0){}
 

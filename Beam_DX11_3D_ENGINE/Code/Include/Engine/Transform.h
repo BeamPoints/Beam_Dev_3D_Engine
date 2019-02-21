@@ -29,7 +29,7 @@ class CTransform
 	inline void setScaleX(const float& factor) { VEC_X(m_scale) = factor; invalidate(); }
 	inline void setScaleY(const float& factor) { VEC_Y(m_scale) = factor; invalidate(); }
 	inline void setScaleZ(const float& factor) { VEC_Z(m_scale) = factor; invalidate(); }
-	inline void setScale(const float& x, const float& y, const float& z);
+	 void setScale(const float& x, const float& y, const float& z);
 	inline void setScale(const XMVECTOR& vec) { m_scale = vec; invalidate(); }
 	inline const XMVECTOR& getScale() const { return m_scale; }
 	void rotateAroundAxisBy(const XMVECTOR& axis, float angle);
@@ -64,7 +64,7 @@ class CTransform
 
 	inline void setTranslation(const XMVECTOR& vec) { m_translation = vec; invalidate(); }
 	inline const XMVECTOR& getTranslation() const { return m_translation; }
-	inline void worldMatrix(const XMMATRIX& parent, XMMATRIX *pCombined);
+	 void worldMatrix(const XMMATRIX& parent, XMMATRIX *pCombined);
 	XMMATRIX composedWorldMatrix() const;
 
 private:

@@ -1,7 +1,7 @@
 #pragma once
 #include "../Rendering/Material.h"
+#include "../Rendering/Light.h"
 #include "Textur.h"
-
 
 class CDefaultMaterial : public MaterialBase<CDefaultMaterial>
 {
@@ -12,12 +12,18 @@ class CDefaultMaterial : public MaterialBase<CDefaultMaterial>
 		XMMATRIX projection;
 	};
 
+	struct SLightBuffer
+	{
+		CLight::SLightParameters lights[4];
+	};
+
 public:
 	struct STextureCollection
 	{
 		std::string diffuse;
 		std::string specular;
 		std::string normal;
+		std::string reflectivity;
 		std::vector<std::string> reflectionMap;
 	};
 
@@ -27,6 +33,7 @@ public:
 	void setWorldMatrix(XMMATRIX aMatrix);
 	void setViewMatrix(XMMATRIX aMatrix);
 	void setProjectionMatrix(XMMATRIX aMatrix);
+	void setLights(std::vector<CLight> const &aLights);
 
 	void setTextures(ID3D11Device *aDevice, STextureCollection const &aTextures);
 
@@ -34,6 +41,7 @@ public:
 	inline STextureState2D const &getSpecularTexture() const { return mSpecularTexture; }
 	inline STextureState2D const &getNormalTexture() const { return mNormalTexture; }
 	inline STextureState2D const &getmReflectionMap() const { return mReflectionMap; }
+	inline STextureState2D const &getReflectionMap() const { return mReflectionMap; }
 
     bool InitializeImpl(std::shared_ptr<CDXIntegration> aDirectX);
     bool CreateImpl();
@@ -49,11 +57,15 @@ public:
 private:
 	STextureCollection  mTextures;
 	SMatrixBuffer       mBufferData;
+	SLightBuffer        mLightBufferData;
 	ID3D11Buffer       *mBuffer;
+	ID3D11Buffer       *mLightBuffer;
+
 
 	STextureState2D mDiffuseTexture;
 	STextureState2D mSpecularTexture;
 	STextureState2D mNormalTexture;
 	STextureState2D mReflectionMap;
+	STextureState2D mReflectivityTexture;
 };
 

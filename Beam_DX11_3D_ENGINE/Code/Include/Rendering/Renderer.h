@@ -5,7 +5,6 @@
 #include "Material.h"
 #include "Entity.h"
 
-
 class CRenderer
 {public:
 

@@ -7,6 +7,7 @@
 #include <assimp/cimport.h>
 
 #pragma comment (lib, "assimp-vc140-mtd.lib")
+//#pragma comment (lib, "assimp-vc140-mt.lib")
 
 //-------------------------------------TEMPLATES---------------------------------------------------
 

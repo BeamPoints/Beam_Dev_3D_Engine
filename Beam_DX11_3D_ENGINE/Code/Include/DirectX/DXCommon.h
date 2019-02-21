@@ -46,13 +46,13 @@ using namespace DirectX;
 
 struct STextureState2D
 {
-	uint32_t width;
-	uint32_t height;
-	uint32_t depth;
-	DXGI_FORMAT format;
-	ID3D11Texture2D *texture;
-	ID3D11SamplerState *sampler;
-	ID3D11RenderTargetView *rtv;
+	uint32_t                  width;
+	uint32_t                  height;
+	uint32_t                  depth;
+	DXGI_FORMAT               format;
+	ID3D11Texture2D          *texture;
+	ID3D11SamplerState       *sampler;
+	ID3D11RenderTargetView   *rtv;
 	ID3D11ShaderResourceView *srv;
 
 };

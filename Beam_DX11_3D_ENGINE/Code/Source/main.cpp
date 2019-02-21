@@ -34,8 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		Timer->initialize();
 		//TIMER START SUCCESSFUL
 		//INITIALIZE RENDERER
-		std::shared_ptr<CRenderer> renderer;
-		//renderer = std::make_shared<CRenderer>(); //ERROR 2512
+		std::shared_ptr<CRenderer> renderer = std::make_shared<CRenderer>();
 		renderer->Initialize(CDXIntegration);
 		//INITIALIZE RENDERER COMPLETE
 		//INITIALIZE ENGINE

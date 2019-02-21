@@ -16,6 +16,7 @@
     <ClInclude Include="Code\Include\Engine\Camera.h" />
     <ClInclude Include="Code\Include\Engine\Transform.h" />
     <ClInclude Include="Code\Include\Rendering\Entity.h" />
+    <ClInclude Include="Code\Include\Rendering\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Source\Base\Timer.cpp" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <None Include="standard_ps.cso" />
     <None Include="standard_vs.cso" />
+    <None Include="assimp-vc140-mtd.dll" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Code\shader\standard_ps.hlsl" />

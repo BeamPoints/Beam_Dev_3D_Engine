@@ -49,8 +49,14 @@ void CRenderer::Render(std::shared_ptr<CDXIntegration> const &aDirectX, std::vec
 
 	for (std::shared_ptr<CEntity> const &entity : aEntities)
 	{
+		//Transform &transform = entity->transform();
+		//transform.worldMatrix(XMMatrixIdentity(), nullptr);
+		
 		std::shared_ptr<CMesh> const mesh = entity->mesh();
 		std::shared_ptr<CMaterial> const material = entity->material();
+
+		//std::shared_ptr<CDefaultMaterial> defaultMaterial = std::static_pointer_cast<CDefaultMaterial>(material);
+		//defaultMaterial->setWorldMatrix(transform.composedWorldMatrix());
 
 		material->Commit(aDirectX); //Transfer data to GPU or IGPU
 
@@ -156,7 +162,8 @@ bool CRenderer::CreateRenderStates(std::shared_ptr<CDXIntegration> const & aDire
 		1,
 		DXGI_FORMAT_D24_UNORM_S8_UINT,
 		D3D11_BIND_DEPTH_STENCIL,
-		{});
+		{}, false);
+
 	mDepthTextureState = textureState;
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc{};
