@@ -20,9 +20,11 @@ private:
 	std::shared_ptr<CDXIntegration> mDirectX;
 	std::shared_ptr<CRenderer> mRenderer;
 	std::shared_ptr<CEntity> mEntity;
+	std::shared_ptr<CEntity> mEntity2;
+	std::shared_ptr<CEntity> mEntity3;
 
-	CLight	mLight;
-	
+	bool setPositions = true;
+
 	CCamera mCamera;
 
 };

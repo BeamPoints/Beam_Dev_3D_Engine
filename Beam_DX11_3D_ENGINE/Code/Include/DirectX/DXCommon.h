@@ -42,7 +42,7 @@
 
 #include "../Base/Window.h"
 
-using namespace DirectX;
+using namespace mDirectX;
 
 struct STextureState2D
 {

@@ -82,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			Engine->Update(timerState, inputState);
 			Engine->Render();
 
-			Sleep(20);
+			Sleep(15);
 		} while (WM_QUIT != msg.message);
 		//END OF THE GAME LOOP
 

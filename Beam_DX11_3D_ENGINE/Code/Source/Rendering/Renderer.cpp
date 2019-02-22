@@ -1,4 +1,5 @@
 #include "../../Include/Rendering/Renderer.h"
+#include "../../Include/Engine/DefaultMaterial.h"
 
 //-------------------------------------CRENDER-CODE------------------------------------------------
 //-------------------------------------INITIALIZE--------------------------------------------------
@@ -49,16 +50,16 @@ void CRenderer::Render(std::shared_ptr<CDXIntegration> const &aDirectX, std::vec
 
 	for (std::shared_ptr<CEntity> const &entity : aEntities)
 	{
-		//Transform &transform = entity->transform();
-		//transform.worldMatrix(XMMatrixIdentity(), nullptr);
-		
-		std::shared_ptr<CMesh> const mesh = entity->mesh();
-		std::shared_ptr<CMaterial> const material = entity->material();
+		CTransform &transform = entity->transform();
+		transform.worldMatrix(XMMatrixIdentity(), nullptr);
 
-		//std::shared_ptr<CDefaultMaterial> defaultMaterial = std::static_pointer_cast<CDefaultMaterial>(material);
-		//defaultMaterial->setWorldMatrix(transform.composedWorldMatrix());
+		std::shared_ptr<CMesh>     const  mesh = entity->mesh();
+		std::shared_ptr<CMaterial>        material = entity->material();
 
-		material->Commit(aDirectX); //Transfer data to GPU or IGPU
+		std::shared_ptr<CDefaultMaterial> defaultMaterial = std::static_pointer_cast<CDefaultMaterial>(material);
+		defaultMaterial->setWorldMatrix(transform.composedWorldMatrix());
+
+		material->Commit(aDirectX); // Push data to GPU.
 
 		std::vector<ID3D11Buffer *> vertexBuffers = mesh->getMeshData().vertexBuffers;
 		std::vector<UINT> strides =

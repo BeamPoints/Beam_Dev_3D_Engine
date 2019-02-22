@@ -17,21 +17,23 @@ struct PSOutput
 Texture2D diffuseTexture : register(t0);
 Texture2D specularTexture : register(t1);
 Texture2D normalTexture : register(t2);
-Texture2D reflectionMap : register(t3);
-Texture2D reflectionTexture : register(t4);
+Texture2D reflectivityTexture : register(t3);
+TextureCube reflectionMap : register(t4);
 SamplerState diffuseSamplerState : register(s0);
 SamplerState specularSamplerState : register(s1);
 SamplerState normalSamplerState : register(s2);
-SamplerState reflectionMapState : register(t3);
+SamplerState reflectivitySamplerState : register(s3);
 SamplerState reflectionSamplerState : register(s4);
-
 
 PSOutput main(PSInput input)
 {
+    // Sample textures
     float4 I_diffuse = diffuseTexture.Sample(diffuseSamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
     float4 I_specular = specularTexture.Sample(specularSamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
     float4 I_normal = normalTexture.Sample(normalSamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
+    float4 I_reflectivity = reflectivityTexture.Sample(reflectivitySamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
 
+    // Unpack normal
     float3 N_packed = I_normal.rgb;
     float3 N_unpacked = (2.0 * N_packed) - 1.0;
 
@@ -46,19 +48,19 @@ PSOutput main(PSInput input)
     float3 Lnorm = normalize(L);
     float3 Nnorm = normalize(N);
     float3 Vnorm = normalize(V);
-
+    
     float3 R = -reflect(L, Nnorm);
     float3 Rnorm = normalize(R);
-    
-    float3 rv = reflect(V, input.normal);
-    //float k_reflect = k_reflect.r
-    //float4 i_reflect = reflectionTexture.Sample(reflectionSamplerState, rv);
+
+    float3 Rv = reflect(V, Nnorm);
+    float k_reflect = min(I_reflectivity.a * 0.55, 0.95);
+    float4 I_reflect = reflectionMap.Sample(reflectionSamplerState, normalize(Rv));
 
     float4 ambient_I = float4(226.0 / 255.0, 0.0 / 255.0, 116.0 / 255.0, 255.0 / 255.0);
     float ambient_k = 0.0;
                         
     float4 lambert_I = I_diffuse;
-    float lambert_k = 1.0;
+    float lambert_k = (1.0 - k_reflect);
     float lambert_cos = saturate(dot(-Lnorm, Nnorm));
         
     float4 specular = float4(0.0, 0.0, 0.0, 1.0);
@@ -66,8 +68,8 @@ PSOutput main(PSInput input)
     if (lambert_cos >= 0)
     {
         float specular_n_min = 1.0;
-        float specular_n_max = 255;
-        float specular_n = (I_specular.r * specular_n_max) + specular_n_min;
+        float specular_n_max = 1024;
+        float specular_n = (I_specular.a * specular_n_max) + specular_n_min;
         float4 specular_I = float4(0.0, 0.0, 1.0, 1.0);
         float specular_k = I_specular.r;
         float specular_cos = pow(saturate(dot(Rnorm, Vnorm)), specular_n);
@@ -76,15 +78,13 @@ PSOutput main(PSInput input)
     }
 
     float4 ambient = ambient_I * ambient_k;
-    float4 lambert = lambert_I * lambert_k * lambert_cos;
+    float4 lambert = ((I_reflect * k_reflect) + (lambert_I * lambert_k)) * lambert_cos;
 
     PSOutput output;
     // output.color = float4((input.position.xy / float2(1920, 1080)), 0.0, 1.0);
     output.color = ambient + lambert + specular;
     // output.color = clamp(output.color, 0.0, 1.0);
     output.color = saturate(output.color);
-
-    //output.color = i_reflect;
     
     return output;
 }

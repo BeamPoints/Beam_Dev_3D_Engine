@@ -16,16 +16,6 @@ void CDefaultMaterial::setProjectionMatrix(XMMATRIX aMatrix)
 
 }
 
-void CDefaultMaterial::setLights(std::vector<CLight> const & aLights)
-{
-	for (uint32_t k = 0; k < min(4, aLights.size()); ++k)
-	{
-		CLight const &light = aLights[k];
-		memcpy(&(mLightBufferData.lights[k]), &(light.getLightParameters()), sizeof(CLight::SLightParameters));
-	}
-
-}
-
 void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection const & aTextures)
 {
 	mTextures = aTextures;
@@ -114,8 +104,7 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 
  bool CDefaultMaterial::InitializeImpl(std::shared_ptr<CDXIntegration> aDirectX)
 {
-	 bool successful = CreateBuffer<SMatrixBuffer>(aDirectX->myDevice(), &mBuffer);
-	 successful &= CreateBuffer<SLightBuffer>(aDirectX->myDevice(), &mLightBuffer);
+	 bool const successful = CreateBuffer<SMatrixBuffer>(aDirectX->myDevice(), &mBuffer);
 	 return successful;
 }
 
@@ -127,31 +116,20 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 }
 
  bool CDefaultMaterial::CommitImpl(std::shared_ptr<CDXIntegration> aDirectX)
-{
-	 auto const &lightUpdater = [this](SLightBuffer *pData) -> bool
-	 {
-		 memcpy(pData, &mLightBufferData, sizeof(SLightBuffer));
-		 return true;
-	 };
-
-	 bool updated = UpdateBuffer<SLightBuffer>(
-		 aDirectX->myContext(),
-		 mLightBuffer,
-		 lightUpdater);
-
+ {
 	 auto const &updater = [this](SMatrixBuffer *pData) -> bool
 	 {
 		 memcpy(pData, &mBufferData, sizeof(SMatrixBuffer));
 		 return true;
 	 };
 
-	 updated &= UpdateBuffer<SMatrixBuffer>(
+	 bool const updated = UpdateBuffer<SMatrixBuffer>(
 		 aDirectX->myContext(),
 		 mBuffer,
 		 updater);
 
 	 return updated;
-}
+ }
 
  bool CDefaultMaterial::FinalizeImpl()
 {
@@ -184,11 +162,6 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 	{
 		mBuffer->Release();
 	}
-
-	if (mLightBuffer)
-	{
-		mLightBuffer->Release();
-	}
 	
 	return true;
 }
@@ -202,10 +175,22 @@ void CDefaultMaterial::setTextures(ID3D11Device * aDevice, STextureCollection co
 
  std::vector<ID3D11ShaderResourceView*> CDefaultMaterial::ShaderResourcesImpl()
 {
-	return {mDiffuseTexture.srv,mSpecularTexture.srv,mNormalTexture.srv};
+	 return {
+		mDiffuseTexture.srv,
+		mSpecularTexture.srv,
+		mNormalTexture.srv,
+		mReflectivityTexture.srv,
+		mReflectionMap.srv
+	 };
 }
 
  std::vector<ID3D11SamplerState*> CDefaultMaterial::SamplersImpl()
 {
-	return {mDiffuseTexture.sampler,mSpecularTexture.sampler,mNormalTexture.sampler};
+	 return {
+		mDiffuseTexture.sampler,
+		mSpecularTexture.sampler,
+		mNormalTexture.sampler,
+		mReflectivityTexture.sampler,
+		mReflectionMap.sampler
+	 };
 }

@@ -1,6 +1,20 @@
 #include "../../Include/Engine/Transform.h"
 
- void CTransform::setScale(const float & x, const float & y, const float & z)
+void CTransform::PrintMatrixRow(XMVECTOR p)
+{
+	XMFLOAT4 c;
+	XMStoreFloat4(&c, p);
+}
+
+void CTransform::PrintMatrix(XMMATRIX * m)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		PrintMatrixRow(m->r[i]);
+	}
+}
+
+void CTransform::setScale(const float & x, const float & y, const float & z)
 {
 	setScaleX(x);
 	setScaleY(y);

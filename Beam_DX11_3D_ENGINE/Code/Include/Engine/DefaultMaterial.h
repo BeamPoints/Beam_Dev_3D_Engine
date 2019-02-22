@@ -12,11 +12,6 @@ class CDefaultMaterial : public MaterialBase<CDefaultMaterial>
 		XMMATRIX projection;
 	};
 
-	struct SLightBuffer
-	{
-		CLight::SLightParameters lights[4];
-	};
-
 public:
 	struct STextureCollection
 	{
@@ -33,7 +28,6 @@ public:
 	void setWorldMatrix(XMMATRIX aMatrix);
 	void setViewMatrix(XMMATRIX aMatrix);
 	void setProjectionMatrix(XMMATRIX aMatrix);
-	void setLights(std::vector<CLight> const &aLights);
 
 	void setTextures(ID3D11Device *aDevice, STextureCollection const &aTextures);
 
@@ -57,9 +51,7 @@ public:
 private:
 	STextureCollection  mTextures;
 	SMatrixBuffer       mBufferData;
-	SLightBuffer        mLightBufferData;
 	ID3D11Buffer       *mBuffer;
-	ID3D11Buffer       *mLightBuffer;
 
 
 	STextureState2D mDiffuseTexture;

@@ -1,15 +1,16 @@
 #pragma once
+#include "../DirectX/DXCommon.h"
 #include "Entity.h"
 #include "../Base/Input.h"
 #include "../Base/Timer.h"
-
+/*			WIRD VERWORFEN WEGEN ZU VIELEN BUGGS
 class CLight : public CEntity
 {public:
 	enum ELightType
 	{
 		Directional = 0,
-		Point,
-		Spot
+		Point = 1,
+		Spot = 2,
 	};
 
 	struct SLightParameters
@@ -18,6 +19,9 @@ class CLight : public CEntity
 		XMVECTOR   position;
 		XMVECTOR   direction;
 		XMVECTOR   color;
+		XMVECTOR   idhf;
+		XMVECTOR   falloffCoefficients;
+		XMVECTOR   lp3;
 		float      intensity;
 		float      distance;
 		float      hotspotAngle;
@@ -26,24 +30,24 @@ class CLight : public CEntity
 
 	inline CLight() : CEntity(){}
 
-	inline bool initialize(SLightParameters const &aParameters)
+	inline bool Initialize(SLightParameters const &aParameters)
 	{
 		mParameters = aParameters;
 
 		return true;
 	}
 
-	inline bool deinitialize()
+	inline bool Finalize()
 	{
 		return true;
 	}
 
-	inline bool update(CTimer::State const &aTimerState, CInput const &aInputState)
+	inline bool Update(CTimer::State const &aTimerState, CInput const &aInputState)
 	{
 		CEntity::Update(aTimerState, aInputState);
 
-		mParameters.position = mTransform.getTranslation();
-		mParameters.direction = mTransform.getDirection();
+		mParameters.position = transform().getTranslation();
+		mParameters.direction = transform().getDirection();
 
 		return true;
 	}
@@ -55,6 +59,5 @@ class CLight : public CEntity
 
 private:
 	SLightParameters mParameters;
-	CTransform        mTransform;
 };
-
+*/

@@ -35,8 +35,8 @@ public:
 	virtual inline bool Update(CTimer::State const &aTimerState, CInput const &aInputState)
 	{
 
-		static constexpr float const sRotateByPerSecond = 15.0f; // Degrees
-		static constexpr float const sMoveByPerSecond = 5.0f; // Units
+		static constexpr float const sRotateByPerSecond = 150.0f; // Degrees
+		static constexpr float const sMoveByPerSecond = 10.0f; // Units
 
 		float const rotateBy = (sRotateByPerSecond * (float)aTimerState.elapesed);
 		float const moveBy = (sMoveByPerSecond   * (float)aTimerState.elapesed);
@@ -44,6 +44,16 @@ public:
 		//rotation += rotateBy;
 
 		//CONTROLLS
+		//USE CAMERA		Ctrl + Y
+		//USE CUBE			Ctrl + 1 | D1 not DNum1
+		//USE Kick Stand	Ctrl + 2 | D2 not DNum2
+		//USE Knife			Ctrl + 3 | D3 not DNum3
+
+		//ASSETS BY Domenic Wamser
+		// The Knife is wrong exported the controlls maybe Weared
+		// The Kick Stand is wrong exported the controlls maybe Weared
+		// The Cube Works Fine
+
 		// Move camera along axes:    WASD
 		// Rotate camera around axes: Ctrl + WASDQE
 		bool const isWPressed = aInputState.getPressed(KeyCode::W);
@@ -58,56 +68,59 @@ public:
 		bool const isCtrlDPressed = aInputState.getPressedWithCtrl(KeyCode::D);
 		bool const isCtrlQPressed = aInputState.getPressedWithCtrl(KeyCode::Q);
 		bool const isCtrlEPressed = aInputState.getPressedWithCtrl(KeyCode::E);
+	
+			if (isCtrlWPressed)
+			{
+				mTransform.pitchBy(-rotateBy);
+			}
+			if (isCtrlSPressed)
+			{
+				mTransform.pitchBy(rotateBy);
+			}
+			if (isCtrlAPressed)
+			{
+				mTransform.yawBy(-rotateBy);
+			}
+			if (isCtrlDPressed)
+			{
+				mTransform.yawBy(rotateBy);
+			}
+			if (isCtrlQPressed)
+			{
+				mTransform.rollBy(rotateBy);
+			}
+			if (isCtrlEPressed)
+			{
+				mTransform.rollBy(-rotateBy);
+			}
 
-		if (isCtrlWPressed)
-		{
-			mTransform.pitchBy(-rotateBy);
-		}
-		if (isCtrlSPressed)
-		{
-			mTransform.pitchBy(rotateBy);
-		}
-		if (isCtrlAPressed)
-		{
-			mTransform.yawBy(-rotateBy);
-		}
-		if (isCtrlDPressed)
-		{
-			mTransform.yawBy(rotateBy);
-		}
-		if (isCtrlQPressed)
-		{
-			mTransform.rollBy(rotateBy);
-		}
-		if (isCtrlEPressed)
-		{
-			mTransform.rollBy(-rotateBy);
-		}
+			if (isWPressed and not isCtrlWPressed)
+			{
+				mTransform.translateDirectionalBy(moveBy);
+			}
+			if (isSPressed and not isCtrlSPressed)
+			{
+				mTransform.translateDirectionalBy(-moveBy);
+			}
+			if (isAPressed and not isCtrlAPressed)
+			{
+				mTransform.translateLateralBy(-moveBy);
+			}
+			if (isDPressed and not isCtrlDPressed)
+			{
+				mTransform.translateLateralBy(moveBy);
+			}
+			if (isQPressed and not isCtrlQPressed)
+			{
+				mTransform.translateVerticalBy(moveBy);
+			}
+			if (isEPressed and not isCtrlEPressed)
+			{
+				mTransform.translateVerticalBy(-moveBy);
+			}
 
-		if (isWPressed and not isCtrlWPressed)
-		{
-			mTransform.translateDirectionalBy(moveBy);
-		}
-		if (isSPressed and not isCtrlSPressed)
-		{
-			mTransform.translateDirectionalBy(-moveBy);
-		}
-		if (isAPressed and not isCtrlAPressed)
-		{
-			mTransform.translateLateralBy(-moveBy);
-		}
-		if (isDPressed and not isCtrlDPressed)
-		{
-			mTransform.translateLateralBy(moveBy);
-		}
-		if (isQPressed and not isCtrlQPressed)
-		{
-			mTransform.translateVerticalBy(moveBy);
-		}
-		if (isEPressed and not isCtrlEPressed)
-		{
-			mTransform.translateVerticalBy(-moveBy);
-		}
+	
+		
 
 		if (nullptr != mMaterial)
 		{
@@ -120,6 +133,7 @@ public:
 	{
 		return mTransform;
 	};
+
 	
 
 private:

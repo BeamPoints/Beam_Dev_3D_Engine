@@ -160,11 +160,9 @@ bool CDXCommon::DetermineHardwareIntegration(std::shared_ptr<CWindow> aWindow, I
 		}
 		else
 		{
-			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-			srvDesc.Texture2DArray.MostDetailedMip =
-			srvDesc.Texture2DArray.MipLevels =
-			srvDesc.Texture2DArray.FirstArraySlice =
-			srvDesc.Texture2DArray.ArraySize = aDepth;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+			srvDesc.Texture2DArray.MostDetailedMip = 0; 
+			srvDesc.Texture2DArray.MipLevels = 1;
 		}
 		aDevice->CreateShaderResourceView(textureHandle, &srvDesc, &srv);
 	}

@@ -69,6 +69,7 @@ bool CTextur::LoadTextureFromFile(const char * filename, Texture2DDescriptor & o
 		outImage.height = h;
 		outImage.depth = 1;
 		outImage.channels = c;
+
 		memcpy(&outImage.inData[0][0], stbuc, outImage.inByteSize);
 		stbi_image_free(stbuc);
 

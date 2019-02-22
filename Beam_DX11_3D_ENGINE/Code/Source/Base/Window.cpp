@@ -32,7 +32,13 @@ LRESULT CALLBACK __defaultClass_wndProc(HWND aWindowHandle, UINT aMessage, WPARA
 		PostQuitMessage(0);
 		return -1;
 	default:
-		return DefWindowProc(aWindowHandle, aMessage, aWParam, aLParam);
+		long double test = aLParam;
+		if (test != aLParam);
+		{
+			return DefWindowProc(aWindowHandle, aMessage, aWParam, test);
+		}
+		return -1;
+		
 	}
 }
 

@@ -5,9 +5,6 @@
 #define DEG(rad) XMConvertToDegrees(rad)
 #define RAD(deg) XMConvertToRadians(deg)
 
-static void PrintMatrixRow(XMVECTOR p);
-static void PrintMatrix(XMMATRIX *m);
-
 class CTransform
 {public:
 
@@ -21,6 +18,8 @@ class CTransform
 		, m_local(XMMatrixIdentity())
 		, m_composed(XMMatrixIdentity())
 	{}
+	static void PrintMatrixRow(XMVECTOR p);
+	static void PrintMatrix(XMMATRIX *m);
 
 	inline const XMVECTOR& getDirection() const { return m_direction; };
 	inline const XMVECTOR& getUp()        const { return m_up; };
@@ -29,9 +28,12 @@ class CTransform
 	inline void setScaleX(const float& factor) { VEC_X(m_scale) = factor; invalidate(); }
 	inline void setScaleY(const float& factor) { VEC_Y(m_scale) = factor; invalidate(); }
 	inline void setScaleZ(const float& factor) { VEC_Z(m_scale) = factor; invalidate(); }
+
 	 void setScale(const float& x, const float& y, const float& z);
 	inline void setScale(const XMVECTOR& vec) { m_scale = vec; invalidate(); }
+
 	inline const XMVECTOR& getScale() const { return m_scale; }
+
 	void rotateAroundAxisBy(const XMVECTOR& axis, float angle);
 
 	inline void rotateXBy(const float& angle) { rotateAroundAxisBy({ 1.0f, 0.0f, 0.0f, 0.0f }, RAD(angle)); }
@@ -46,7 +48,7 @@ class CTransform
 	inline void setRotationY(const float& angle) { setRotation(0, angle, 0); }
 	inline void setRotationZ(const float& angle) { setRotation(0, 0, angle); }
 	inline void setRotation(const float& x, const float& y, const float& z) { setRotation({ x, y, z, 0.0f }); }
-	inline void setRotation(const XMVECTOR& vec);
+	void setRotation(const XMVECTOR& vec);
 	const XMVECTOR getRotation();
 
 	inline void translateXBy(const float& offset) { VEC_X(m_translation) += offset; invalidate(); }
@@ -64,7 +66,8 @@ class CTransform
 
 	inline void setTranslation(const XMVECTOR& vec) { m_translation = vec; invalidate(); }
 	inline const XMVECTOR& getTranslation() const { return m_translation; }
-	 void worldMatrix(const XMMATRIX& parent, XMMATRIX *pCombined);
+
+	void worldMatrix(const XMMATRIX& parent, XMMATRIX *pCombined);
 	XMMATRIX composedWorldMatrix() const;
 
 private:

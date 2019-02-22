@@ -10,6 +10,7 @@
 
  bool CCamera::Update(CTimer::State const & aTimerState, CInput const & aInputState)
 {
+
 	 CEntity::Update(aTimerState, aInputState);
 	updateViewMatrix();
 
