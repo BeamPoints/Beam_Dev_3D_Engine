@@ -40,9 +40,6 @@
 #pragma comment(lib, "dxguid.lib")
 #endif
 
-#include "../Base/Window.h"
-
-using namespace mDirectX;
 
 struct STextureState2D
 {
