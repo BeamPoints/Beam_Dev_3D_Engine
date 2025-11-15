@@ -36,7 +36,7 @@ VSOutput main(VSInput input)
     output.tangent = mul((float3x3) view, mul((float3x3) world, input.tangent));
     output.texcoord = input.texcoord;
     output.light = mul((float3x3) view, light);
-
+    
     float3 normal = normalize(output.normal);
     float3 tangent = normalize(output.tangent);
     float3 bitangent = normalize(cross(tangent, normal));

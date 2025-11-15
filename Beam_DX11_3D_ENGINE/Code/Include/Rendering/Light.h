@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "../Base/Input.h"
 #include "../Base/Timer.h"
-/*			WIRD VERWORFEN WEGEN ZU VIELEN BUGGS
+
 class CLight : public CEntity
 {public:
 	enum ELightType
@@ -60,4 +60,4 @@ class CLight : public CEntity
 private:
 	SLightParameters mParameters;
 };
-*/
+

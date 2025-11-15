@@ -30,7 +30,7 @@ PSOutput main(PSInput input)
     // Sample textures
     float4 I_diffuse = diffuseTexture.Sample(diffuseSamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
     float4 I_specular = specularTexture.Sample(specularSamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
-    float4 I_normal = normalTexture.Sample(normalSamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
+    float4 I_normal = normalTexture.Sample(normalSamplerState, float2(input.texcoord.x, abs(1.25 - input.texcoord.y)));
     float4 I_reflectivity = reflectivityTexture.Sample(reflectivitySamplerState, float2(input.texcoord.x, abs(1.0 - input.texcoord.y)));
 
     // Unpack normal

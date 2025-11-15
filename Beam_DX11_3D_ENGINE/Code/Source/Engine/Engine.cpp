@@ -101,12 +101,15 @@ void CEngine::Initialize()
 
 	CCamera::CameraParameters cameraParameters;
 	
-	cameraParameters.projectionType = CCamera::ECameraProjectionType::Perspective;
-	cameraParameters.fovY = RAD(60);
-	cameraParameters.aspectRatio = (1920.0 / 1080.0);
-	cameraParameters.minDepth = 0.01;
-	cameraParameters.maxDepth = 100;
 	
+
+
+	cameraParameters.projectionType = CCamera::ECameraProjectionType::Perspective;
+	cameraParameters.fovY = RAD(90);
+	cameraParameters.aspectRatio = (1920.0 / 1080.0);
+	cameraParameters.minDepth = 0.00001f;
+	cameraParameters.maxDepth = 250;
+
 	mCamera.Initialize(cameraParameters);
 }
 

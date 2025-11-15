@@ -24,7 +24,7 @@ std::shared_ptr<CDXIntegration> CDXIntegration::Create(std::shared_ptr<CWindow> 
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.Flags = 0;
 
-	D3D_FEATURE_LEVEL FeatureLVL = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL FeatureLVL = D3D_FEATURE_LEVEL_12_1;
 
 	ID3D11Device        *pDevice = nullptr;
 	ID3D11DeviceContext *pContext = nullptr;

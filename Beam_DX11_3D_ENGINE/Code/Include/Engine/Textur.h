@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <iostream>
 
 class CTextur
 {
@@ -16,7 +17,7 @@ public:
 		unsigned int                      mipLevels;		  
 	};
 
-	static bool LoadTextureArrayFromFiles(const std::vector<std::string> &filenames, Texture2DDescriptor &outImage);
+	static bool LoadTextureArrayFromFiles(const std::vector <std::string > & filenames, Texture2DDescriptor& outImage);
 
 	static bool LoadTextureFromFile(const char* filename, Texture2DDescriptor& outImage);
 

@@ -4,8 +4,9 @@
 //-------------------------------------CRENDER-CODE------------------------------------------------
 //-------------------------------------INITIALIZE--------------------------------------------------
 
-bool CRenderer::Initialize(std::shared_ptr<CDXIntegration> const & aDirectX)
+bool CRenderer::Initialize(std::shared_ptr<CDXIntegration> const& aDirectX, std::shared_ptr<CWindow> &aWindow)
 {
+	mDisplaySettings = aWindow->display();
 	return CreateRenderStates(aDirectX);
 }
 
@@ -16,8 +17,8 @@ void CRenderer::Render(std::shared_ptr<CDXIntegration> const &aDirectX, std::vec
 	D3D11_VIEWPORT viewPort{};
 	viewPort.TopLeftX = 0;
 	viewPort.TopLeftY = 0;
-	viewPort.Width = 1920;
-	viewPort.Height = 1080;
+	viewPort.Width = mDisplaySettings.width;
+	viewPort.Height = mDisplaySettings.height;
 	viewPort.MinDepth = 0.1f;
 	viewPort.MaxDepth = 1.0f;
 

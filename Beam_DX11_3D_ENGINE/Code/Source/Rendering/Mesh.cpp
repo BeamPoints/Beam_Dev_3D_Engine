@@ -146,14 +146,14 @@ std::shared_ptr<CMesh> CMesh::CreateMeshFromFile(std::shared_ptr<CDXIntegration>
 	if (not pScene)
 	{
 		const std::string err = importer.GetErrorString();
-		return false;
+		return nullptr;
 	}
 
 	pScene = importer.ApplyPostProcessing(flags);
 
 	if (not pScene->HasMeshes())
 	{
-		return false;
+		return nullptr;
 	}
 
 	unsigned int totalVertexCount = 0;

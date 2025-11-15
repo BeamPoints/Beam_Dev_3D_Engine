@@ -5,6 +5,8 @@
 #define DEG(rad) XMConvertToDegrees(rad)
 #define RAD(deg) XMConvertToRadians(deg)
 
+using namespace DirectX;
+
 class CTransform
 {public:
 

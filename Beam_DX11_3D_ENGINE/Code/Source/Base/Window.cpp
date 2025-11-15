@@ -5,9 +5,13 @@
 
 std::shared_ptr<CWindow> CWindow::Create(HINSTANCE aInstance)
 {
+	RECT desktop;
+	const HWND	hDesktop = GetDesktopWindow();
+	
+	GetWindowRect(hDesktop, &desktop);
 	DisplaySettings display = {};
-	display.width = GetSystemMetrics(SM_CXSCREEN);
-	display.height = GetSystemMetrics(SM_CYSCREEN);
+	display.width = desktop.right;
+	display.height = desktop.bottom;
 
 	std::shared_ptr<CWindow> wind = std::shared_ptr<CWindow>(new CWindow(aInstance, display));
 

@@ -30,16 +30,19 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <d3dcommon.h>
+#include "../Base/Window.h"
 
 #ifndef __DX11_LINKED__
 #define __DX11_LINKED__
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d10.lib")
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 #endif
 
+using namespace DirectX;
 
 struct STextureState2D
 {
@@ -65,4 +68,6 @@ public:
 	static STextureState2D CreateTexture2D(ID3D11Device *aDevice, uint32_t const &aWidth, uint32_t const &aHeight,
 		uint32_t const &aDepth, DXGI_FORMAT const &aFormat, D3D11_BIND_FLAG const &aBindFlag, std::vector<std::vector<uint8_t>> const &aData, bool const &aIsCubeMap);
 };
+
+
 
