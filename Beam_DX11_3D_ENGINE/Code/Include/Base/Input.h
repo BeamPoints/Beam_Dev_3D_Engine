@@ -1,7 +1,32 @@
 #pragma once
 #include <map>
 #include <Windows.h>
+#include <WinUser.h>
 #include <memory>
+
+enum class MouseState : uint8_t
+{
+	MOUSE_IS_MOVING			= 0x0001,
+	MOUSE_LEFT_PRESSED		= WM_LBUTTONDOWN,
+	MOUSE_LEFT_RELEASED		= WM_LBUTTONUP,
+	MOUSE_RIGHT_PRESSED		= WM_RBUTTONDOWN,
+	MOUSE_RIGHT_RELEASED	= WM_RBUTTONUP,
+	MOUSE_MIDDLE_PRESSED	= WM_MBUTTONDOWN,
+	MOUSE_MIDDLE_RELEASED	= WM_MBUTTONUP,
+	MOUSE_WHEEL_MOVED		= 0x0800
+};
+
+enum class MouseEvents
+{
+	MouseIsMoving			= 1,
+	MouseLeftPressed		= 2,
+	MouseLeftReleased		= 4,
+	MouseRightPressed		= 8,
+	MouseRightReleased		= 16,
+	MouseMiddlePressed		= 32,
+	MouseMiddleReleased		= 64,
+	MouseWheelMoved			= 2048
+};
 
 enum class KeyCode: uint8_t
 {
@@ -79,6 +104,16 @@ static KeyCode MapWinApiVKeyToKeyCode(uint8_t const &keyCode)
 	return (KeyCode) static_cast<std::underlying_type_t<KeyCode>>(keyCode);
 }
 
+static uint8_t MapMouseCodeToWinApiMouseEvent(MouseEvents const &aMouseEvent)
+{
+	return (uint8_t) static_cast<std::underlying_type_t<MouseEvents>>(aMouseEvent);
+}
+
+static MouseEvents MapWinApiMouseEventToMouseCode(uint8_t const &aMouseEvent)
+{
+	return (MouseEvents) static_cast<std::underlying_type_t<MouseEvents>>(aMouseEvent);
+}
+
 class CInput
 {
 public:
@@ -88,15 +123,23 @@ public:
 
 	void setPressed(uint8_t const &aKeyCode, bool aPressed, bool aIsAlt = false);
 
+	void setMPressed(MouseEvents const &aMouseEvent, bool aPressed);
+
 	bool getPressed(KeyCode const &aKeyCode) const;
+
+	bool getMPressed(MouseEvents const& aMouseEvent) const;
+
 	bool getPressedWithCtrl(KeyCode const &aKeyCode) const;
 	bool getPressedWithShift(KeyCode const &aKeyCode) const;
 
 	bool reset();
 
+	LPPOINT MouseMoved(LPPOINT WindowCenter, LPPOINT NewMousePos);
+
 private:
 
 	std::map< KeyCode, KeyState> mKeyStates;
+	std::map< MouseEvents, MouseEvents> mMouseStates;
 	
 };
 

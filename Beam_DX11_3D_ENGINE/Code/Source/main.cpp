@@ -8,7 +8,7 @@
 #include "../Include/Engine/Engine.h"
 #include "../Include/Rendering/Renderer.h"
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow = 1)
 {
 	try
 	{
@@ -41,7 +41,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		std::shared_ptr<CEngine> Engine = std::make_shared<CEngine>(renderer, CDXIntegration);
 		Engine->Initialize();
 		//INITIALIZE ENGINE COMPLETE
+		
+		//CHECK WINDOWS VERSION FOR MOUSE INPUT SUPPORT
+		bool bWinAboveNT = false;
+		bool bMouseInputNoNull = false;
+		LPPOINT NewMousePos = new POINT();
+		if (_WIN32_WINNT >= 0x0400)
+		{
+			bWinAboveNT = true;
+			SetWindowsHookEx(WH_MOUSE_LL, NULL, hInstance, 0);
+		}
 
+		UINT Scrolllines = 0;
 
 		//INITIALIZE GAME LOOP
 		MSG msg = {};
@@ -57,6 +68,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				// msg.message:
 				//   contains a value identified by the WM_-defines for each 
 				//   message type of the windows message system.
+				if (Window->ActMousePoint() != Window->WindowCenterPoint())
+				{
+					bMouseInputNoNull = GetCursorPos(Window->ActMousePoint());
+					if(bMouseInputNoNull && bWinAboveNT)
+					{
+						NewMousePos = inputState.MouseMoved(Window->WindowCenterPoint(), Window->ActMousePoint());
+
+						if(NewMousePos != nullptr)
+						{
+							
+
+						}
+					}
+				}
+
+				Scrolllines = SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, 0, 0);
+				if (SPI_GETMOUSECLICKLOCK == 0x0001 )
+				{
+					
+				}
+
+
 				if (WM_KEYDOWN == msg.message)
 				{
 					inputState.setPressed(msg.wParam, true, (GetKeyState(VK_LCONTROL) & 0x8000));
@@ -79,10 +112,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			CTimer::State const timerState = Timer->state();
 
-			Engine->Update(timerState, inputState);
+			Engine->Update(timerState, inputState, NewMousePos);
 			Engine->Render();
 
-			Sleep(15);
+			// IMPROVE PERFORMANCE WHILE NOT ACTIVE WINDOW
+			// SetMousePos to center
+			if (GetFocus() == Window->WindowHandle())
+			{
+				ShowCursor(FALSE);
+				SetCursorPos(Window->WindowCenterPoint()->x, Window->WindowCenterPoint()->y);
+				Sleep(5);
+			}
+			else
+			{
+				ShowCursor(TRUE);
+				Sleep(30);
+			}
+			Sleep(12);
 		} while (WM_QUIT != msg.message);
 		//END OF THE GAME LOOP
 

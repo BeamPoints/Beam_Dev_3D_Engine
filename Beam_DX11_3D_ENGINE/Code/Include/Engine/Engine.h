@@ -12,7 +12,7 @@ class CEngine
 	CEngine(std::shared_ptr<CRenderer> const &aRenderer,std::shared_ptr<CDXIntegration> const &aDirectX);
 
 	void Initialize();
-	void Update(CTimer::State const &aTimerState, CInput const &aInputState);
+	void Update(CTimer::State const &aTimerState, CInput const &aInputState, LPPOINT &aMouse);
 	void Render();
 	void Finalize();
 

@@ -32,7 +32,7 @@ public:
 	inline std::shared_ptr<CMesh>     const &mesh()     const { return mMesh; }
 	inline std::shared_ptr<CMaterial> const &material() const { return mMaterial; }
 
-	virtual inline bool Update(CTimer::State const &aTimerState, CInput const &aInputState)
+	virtual inline bool Update(CTimer::State const &aTimerState, CInput const &aInputState, LPPOINT aMouse)
 	{
 
 		static constexpr float const sRotateByPerSecond = 150.0f; // Degrees
@@ -60,7 +60,7 @@ public:
 		bool const isAPressed = aInputState.getPressed(KeyCode::A);
 		bool const isSPressed = aInputState.getPressed(KeyCode::S);
 		bool const isDPressed = aInputState.getPressed(KeyCode::D);
-		bool const isQPressed = aInputState.getPressed(KeyCode::Q);
+		bool const isQPressed = aInputState.getPressed(KeyCode::Q); 
 		bool const isEPressed = aInputState.getPressed(KeyCode::E);
 		bool const isCtrlWPressed = aInputState.getPressedWithCtrl(KeyCode::W);
 		bool const isCtrlAPressed = aInputState.getPressedWithCtrl(KeyCode::A);
@@ -68,56 +68,81 @@ public:
 		bool const isCtrlDPressed = aInputState.getPressedWithCtrl(KeyCode::D);
 		bool const isCtrlQPressed = aInputState.getPressedWithCtrl(KeyCode::Q);
 		bool const isCtrlEPressed = aInputState.getPressedWithCtrl(KeyCode::E);
-	
-			if (isCtrlWPressed)
+		bool const isMouseMoved = aInputState.getMPressed(MouseEvents::MouseIsMoving); // NOT SURE IF THIS WORKS HERE
+		if (aMouse != nullptr)
+		{
+			if (aMouse->x != NULL && aMouse->y != NULL)
 			{
-				mTransform.pitchBy(-rotateBy);
-			}
-			if (isCtrlSPressed)
-			{
-				mTransform.pitchBy(rotateBy);
-			}
-			if (isCtrlAPressed)
-			{
-				mTransform.yawBy(-rotateBy);
-			}
-			if (isCtrlDPressed)
-			{
-				mTransform.yawBy(rotateBy);
-			}
-			if (isCtrlQPressed)
-			{
-				mTransform.rollBy(rotateBy);
-			}
-			if (isCtrlEPressed)
-			{
-				mTransform.rollBy(-rotateBy);
-			}
 
-			if (isWPressed and not isCtrlWPressed)
-			{
-				mTransform.translateDirectionalBy(moveBy);
+				if (aMouse->x > 0)
+				{
+					mTransform.pitchBy(-aMouse->x);
+				}
+				if (aMouse->x < -0)
+				{
+					mTransform.pitchBy(aMouse->x);
+				}
+				if (aMouse->y > 0)
+				{
+					mTransform.yawBy(-aMouse->y);
+				}
+				if (aMouse->y < 0)
+				{
+					mTransform.yawBy(aMouse->y);
+				}
+	
 			}
-			if (isSPressed and not isCtrlSPressed)
-			{
-				mTransform.translateDirectionalBy(-moveBy);
-			}
-			if (isAPressed and not isCtrlAPressed)
-			{
-				mTransform.translateLateralBy(-moveBy);
-			}
-			if (isDPressed and not isCtrlDPressed)
-			{
-				mTransform.translateLateralBy(moveBy);
-			}
-			if (isQPressed and not isCtrlQPressed)
-			{
-				mTransform.translateVerticalBy(moveBy);
-			}
-			if (isEPressed and not isCtrlEPressed)
-			{
-				mTransform.translateVerticalBy(-moveBy);
-			}
+		}
+		
+		if (isCtrlWPressed)
+		{
+			mTransform.pitchBy(-rotateBy);
+		}
+		if (isCtrlSPressed)
+		{
+			mTransform.pitchBy(rotateBy);
+		}
+		if (isCtrlAPressed)
+		{
+			mTransform.yawBy(-rotateBy);
+		}
+		if (isCtrlDPressed)
+		{
+			mTransform.yawBy(rotateBy);
+		}
+		if (isCtrlQPressed)
+		{
+			mTransform.rollBy(rotateBy);
+		}
+		if (isCtrlEPressed)
+		{
+			mTransform.rollBy(-rotateBy);
+		}
+
+		if (isWPressed and not isCtrlWPressed)
+		{
+			mTransform.translateDirectionalBy(moveBy);
+		}
+		if (isSPressed and not isCtrlSPressed)
+		{
+			mTransform.translateDirectionalBy(-moveBy);
+		}
+		if (isAPressed and not isCtrlAPressed)
+		{
+			mTransform.translateLateralBy(-moveBy);
+		}
+		if (isDPressed and not isCtrlDPressed)
+		{
+			mTransform.translateLateralBy(moveBy);
+		}
+		if (isQPressed and not isCtrlQPressed)
+		{
+			mTransform.translateVerticalBy(moveBy);
+		}
+		if (isEPressed and not isCtrlEPressed)
+		{
+			mTransform.translateVerticalBy(-moveBy);
+		}
 
 	
 		

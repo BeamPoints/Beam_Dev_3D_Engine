@@ -12,17 +12,26 @@ std::shared_ptr<CWindow> CWindow::Create(HINSTANCE aInstance)
 	DisplaySettings display = {};
 	display.width = desktop.right;
 	display.height = desktop.bottom;
+	float* centerpoint = new float[2];
 
 	std::shared_ptr<CWindow> wind = std::shared_ptr<CWindow>(new CWindow(aInstance, display));
+	wind->mWindowCenterPoint = new POINT();
+	wind->mWindowCenterPoint->y = display.height / 2;
+	wind->mWindowCenterPoint->x = display.width / 2;
+
+
 
 	return wind;
 }
 
 CWindow::CWindow(HINSTANCE aInstance, DisplaySettings const &aDisplay)
 {
+
 	mInstance = aInstance;
 	mWindowHandle = 0;
 	mDisplay = aDisplay;
+
+
 }
 
 LRESULT CALLBACK __defaultClass_wndProc(HWND aWindowHandle, UINT aMessage, WPARAM aWParam, LPARAM aLParam)

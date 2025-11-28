@@ -42,9 +42,9 @@ class CLight : public CEntity
 		return true;
 	}
 
-	inline bool Update(CTimer::State const &aTimerState, CInput const &aInputState)
+	inline bool Update(CTimer::State const &aTimerState, CInput const &aInputState, LPPOINT& aMouse)
 	{
-		CEntity::Update(aTimerState, aInputState);
+		CEntity::Update(aTimerState, aInputState, aMouse);
 
 		mParameters.position = transform().getTranslation();
 		mParameters.direction = transform().getDirection();

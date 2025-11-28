@@ -29,7 +29,7 @@ class CCamera : public CEntity
 	inline CCamera(): CEntity(){}
 
     bool Initialize(CameraParameters const &aParameters);
-    bool Update(CTimer::State const &aTimerState, CInput const &aInputState);
+    bool Update(CTimer::State const &aTimerState, CInput const &aInputState, LPPOINT aMouse);
     bool Finalize(){return true;}
 
 	inline XMMATRIX const &viewMatrix()       const { return mViewMatrix; }

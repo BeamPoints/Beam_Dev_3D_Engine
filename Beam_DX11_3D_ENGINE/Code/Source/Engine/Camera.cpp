@@ -8,10 +8,10 @@
 	return true;
 }
 
- bool CCamera::Update(CTimer::State const & aTimerState, CInput const & aInputState)
+ bool CCamera::Update(CTimer::State const & aTimerState, CInput const & aInputState, LPPOINT aMouse)
 {
 
-	 CEntity::Update(aTimerState, aInputState);
+	 CEntity::Update(aTimerState, aInputState, aMouse);
 	updateViewMatrix();
 
 	return false;

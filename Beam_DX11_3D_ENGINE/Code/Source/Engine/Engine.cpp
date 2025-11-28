@@ -113,7 +113,7 @@ void CEngine::Initialize()
 	mCamera.Initialize(cameraParameters);
 }
 
-void CEngine::Update(CTimer::State const & aTimerState, CInput const & aInputState)
+void CEngine::Update(CTimer::State const & aTimerState, CInput const & aInputState, LPPOINT &aMouse)
 {
 	static CEntity *inputReceiver = nullptr;
 	if (aInputState.getPressedWithCtrl(KeyCode::Y))
@@ -139,20 +139,20 @@ void CEngine::Update(CTimer::State const & aTimerState, CInput const & aInputSta
 
 	if (nullptr != inputReceiver)
 	{
-		inputReceiver->Update(aTimerState, aInputState);
+		inputReceiver->Update(aTimerState, aInputState, aMouse);
 	}
 
 
-	mCamera.Update(aTimerState, {});
+	mCamera.Update(aTimerState, {},aMouse);
 
 	XMMATRIX const &viewMatrix = mCamera.viewMatrix();
 	XMMATRIX const &projectionMatrix = mCamera.projectionMatrix();
 
-	mEntity->Update(aTimerState, {});
+	mEntity->Update(aTimerState, {}, aMouse);
 	mEntity->getTransform().worldMatrix(XMMatrixIdentity(), nullptr);
-	mEntity2->Update(aTimerState, {});
+	mEntity2->Update(aTimerState, {}, aMouse);
 	mEntity2->getTransform().worldMatrix(XMMatrixIdentity(), nullptr);
-	mEntity3->Update(aTimerState, {});
+	mEntity3->Update(aTimerState, {}, aMouse);
 	mEntity3->getTransform().worldMatrix(XMMatrixIdentity(), nullptr);
 
 	mEntity->transform().worldMatrix(XMMatrixIdentity(), nullptr);
